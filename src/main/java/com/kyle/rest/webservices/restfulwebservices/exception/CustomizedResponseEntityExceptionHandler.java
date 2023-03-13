@@ -45,9 +45,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(// Comes from @Valid check in resource/controller
 			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-		ArrayList<?> thing = (ArrayList<?>)  ex.getDetailMessageArguments()[1];
-		String thing2 = (String) thing.get(0);
-		
+	
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
 				ex.getMessage(), request.getDescription(false));// message from UserNotFoundException
 		
