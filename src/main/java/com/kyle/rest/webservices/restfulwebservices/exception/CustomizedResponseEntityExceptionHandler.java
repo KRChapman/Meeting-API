@@ -41,17 +41,26 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	}
 	
 	
+	// Validation error handling
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(// Comes from @Valid check in resource/controller
 			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        // Potential for many validation errors so need custom message
 
-	
+//		 messsage+=	 "Total Errors:" + ex.getErrorCount() + " First Error:" + ex.getFieldError().getDefaultMessage();
+
+		StringBuilder defualtmessage = new StringBuilder();
+		ex.getAllErrors().forEach(ele->{
+		defualtmessage.append("Error:").append( ele.getDefaultMessage()).append(" ").toString();
+		});
+		
+
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
-				ex.getMessage(), request.getDescription(false));// message from UserNotFoundException
+				defualtmessage.toString(), request.getDescription(false));// message from UserNotFoundException
 		
 		return new ResponseEntity<Object>(errorDetails, HttpStatus.NOT_FOUND);
 		
-//				"Total Errors:" + ex.getErrorCount() + " First Error:" + ex.getFieldError().getDefaultMessage(), request.getDescription(false));
+//				
 //		return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
