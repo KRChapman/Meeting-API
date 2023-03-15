@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.kyle.rest.webservices.restfulwebservices.jpa.PostRepository;
 import com.kyle.rest.webservices.restfulwebservices.jpa.UserRepository;
 
 import jakarta.validation.Valid;
@@ -20,12 +21,14 @@ import jakarta.validation.Valid;
 @RestController
 public class UserJPAResource {
 	
-	private UserDaoService service;
+
 	private UserRepository repository;
+	private PostRepository postRepository;// Maybe best Practie to have a PostRsource/PostJPAResource class/component/bean
 	
-	public UserJPAResource(UserDaoService service, UserRepository repository) {
-		this.service = service;
+	public UserJPAResource( PostRepository postRepositor, UserRepository repository) {
+
 		this.repository = repository;
+		this.postRepository = postRepository;
 	}
 
 	// GET /users
@@ -42,7 +45,7 @@ public class UserJPAResource {
 	
 		if(user.isEmpty())  // user==null
 			throw new UserNotFoundException("id:"+id);
-		System.out.println(user);
+
 		return user.get();
 	}
 	
@@ -67,5 +70,19 @@ public class UserJPAResource {
 	@DeleteMapping("/jpa/users/{id}")
 	public void deleteUser(@PathVariable int id) {
 		repository.deleteById(id);
+	}
+	
+	@GetMapping("/jpa/users/{id}/posts")
+	public List<Post> getUserPosts(@PathVariable int id) {
+		Optional<User> user = repository.findById(id);	
+		
+		if(user.isEmpty())  // user==null
+			throw new UserNotFoundException("id:"+id);
+	//	select p1_0.user_id,p1_0.id,p1_0.description from post p1_0 where p1_0.user_id=?
+		// Select USER_ID, ID, DESCRIPTION From Post where USER_ID = 10002
+		// USER_ID is not returned since it is not modeled on the POST. THe POST model
+		// has the entire user object
+		List<Post>  posts = user.get().getPosts();
+		return posts;
 	}
 }

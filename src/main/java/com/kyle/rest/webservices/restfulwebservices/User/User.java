@@ -3,12 +3,23 @@ package com.kyle.rest.webservices.restfulwebservices.User;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+
+//create sequence user_details_seq start with 1 increment by 50
+//
+//create table user (
+//id integer not null, 
+//birth_date timestamp, 
+//name varchar(255), 
+//primary key (id)
+//);
 
 
 @Entity(name="user_details")
@@ -20,8 +31,9 @@ public class User {
 	private String name;
 	@Past(message= "date should be in the past")
 	private LocalDate birthDate;
-	
-	@OneToMany(mappedBy = "user")
+
+	@OneToMany( mappedBy = "user")
+	//@JsonIgnore
 	private List<Post> posts;
 	
 	protected User() {
@@ -37,6 +49,14 @@ public class User {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 
 	public void setId(Integer id) {
