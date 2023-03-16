@@ -34,7 +34,7 @@ public class User {
 
 	@OneToMany( mappedBy = "user")
 	//@JsonIgnore
-	private List<Post> posts;
+	private List<Post> posts; // Select * From Post where USER_ID = 10001
 	
 	protected User() {
 		

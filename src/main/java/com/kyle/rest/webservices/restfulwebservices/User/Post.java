@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Size;
 
 //create sequence post_seq start with 1 increment by 50
 //
@@ -27,7 +28,7 @@ public class Post {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	
+	@Size(min=5)
 	private String description;
 	// fetch = FetchType.LAZY
 	@ManyToOne(fetch = FetchType.LAZY)	// Eager would bring User along with posts
@@ -56,6 +57,10 @@ public class Post {
 	public User getUser() {
 		return user;
 	//	return user.getId();
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override
