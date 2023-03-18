@@ -53,12 +53,9 @@ public class UserJPAResource {
 	
 	@PostMapping("/jpa/users")
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-	
-		
-		
+			
 		User savedUser = userRepository.save(user);
-		
-		
+			
 		// SETS A URL ON THE LOCATION HEADER
 		// FOR SENDING EXTRA INFORMATION ABOUT LOCATION TO FIND Data at a specific url ie: http://localhost:8080/users/2
                       // grabs current URL with the savedUser id
